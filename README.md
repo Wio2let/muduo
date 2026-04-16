@@ -13,13 +13,15 @@
 
 ## 当前进度
 
-当前已经完成到第 1 阶段：
+当前已经完成到第 2 阶段：
 
 - 搭好构建系统
 - 放入最基础的公共组件
 - 用一个很小的示例确认工程可编译、可运行
 - 实现最小单线程 Reactor：`EventLoop`、`Channel`、`Poller`、`EPollPoller`
 - 用 `eventfd` 示例验证 `epoll_wait -> Channel -> callback` 链路
+- 加入 `InetAddress`、`Socket`、`Acceptor`
+- 用监听示例验证 `listen fd -> epoll -> accept4()` 链路
 
 ## 说明
 
@@ -48,14 +50,15 @@ cmake -S . -B build
 cmake --build build
 ./build/stage0_bootstrap
 ./build/stage1_eventfd
+./build/stage2_acceptor
 ```
 
 ## 下一步
 
-下一阶段进入 TCP 接入层，开始补充：
+下一阶段进入连接抽象层，开始补充：
 
-- `InetAddress`
-- `Socket`
-- `Acceptor`
+- `Buffer`
+- `Callbacks`
+- `TcpConnection`
 
-完成后，`EventLoop` 就能监听真正的 server socket，而不仅仅是 `eventfd`。
+完成后，新接入的 `connfd` 就能被包装成连接对象，而不是只停留在 `accept4()` 返回的裸 fd。

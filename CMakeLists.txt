@@ -8,12 +8,17 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+find_package(Threads REQUIRED)
+
 add_library(muduo_core
+    src/Acceptor.cc
     src/Channel.cc
     src/CurrentThread.cc
     src/EPollPoller.cc
     src/EventLoop.cc
+    src/InetAddress.cc
     src/Poller.cc
+    src/Socket.cc
     src/Timestamp.cc
 )
 
@@ -27,6 +32,11 @@ target_compile_options(muduo_core
         -Wall
         -Wextra
         -Wpedantic
+)
+
+target_link_libraries(muduo_core
+    PUBLIC
+        Threads::Threads
 )
 
 add_executable(stage0_bootstrap
@@ -43,6 +53,15 @@ add_executable(stage1_eventfd
 )
 
 target_link_libraries(stage1_eventfd
+    PRIVATE
+        muduo_core
+)
+
+add_executable(stage2_acceptor
+    example/stage2_acceptor.cc
+)
+
+target_link_libraries(stage2_acceptor
     PRIVATE
         muduo_core
 )

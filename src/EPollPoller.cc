@@ -50,6 +50,9 @@ void EPollPoller::updateChannel(Channel* channel) {
     const int index = channel->index();
 
     if (index == kNew || index == kDeleted) {
+        if (channel->isNoneEvent()) {
+            return;
+        }
         if (index == kNew) {
             channels_[channel->fd()] = channel;
         }

@@ -12,4 +12,4 @@ public:
     noncopyable& operator=(const noncopyable&) = delete;
 };
 
-}  // namespace muduo
+}

@@ -6,7 +6,7 @@
 namespace muduo {
 
 class Timestamp {
-public:
+  public:
     Timestamp() = default;
     explicit Timestamp(int64_t microSecondsSinceEpoch);
 
@@ -15,8 +15,7 @@ public:
     int64_t microSecondsSinceEpoch() const;
     std::string toString() const;
 
-private:
+  private:
     int64_t microSecondsSinceEpoch_{0};
 };
-
-}  // namespace muduo
+} // namespace muduo

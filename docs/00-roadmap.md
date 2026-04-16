@@ -1,10 +1,10 @@
 # 复刻路线
 
-这份文档是我们之后每一轮推进时的总导航。
+项目开发过程中的总览笔记。
 
 ## 整体结构
 
-先把脑子里那张图立住：
+模块关系如下：
 
 ```text
                    user code
@@ -52,7 +52,7 @@
 
 ## 主流程
 
-单线程版本先只抓这一条：
+单线程版本主流程：
 
 ```text
 socket readable
@@ -73,7 +73,7 @@ Channel invokes callback
 TcpConnection / Acceptor handles event
 ```
 
-多线程版本再在上面补这一条：
+多线程版本在此基础上补充：
 
 ```text
 main loop accepts connfd
@@ -136,12 +136,12 @@ wakeup sub loop by eventfd
 - 支持 one loop per thread
 - 做主从 Reactor
 
-## 学习方法
+## 记录方式
 
-每推进一个阶段，都做 3 件事：
+每推进一个阶段，按下面的顺序整理：
 
 1. 先画关系图
 2. 再写最小可运行版本
 3. 最后再补设计原因
 
-你真正要追求的是“自己能讲出来”，而不是“代码长得像 muduo”。
+重点是把模块职责和主流程讲清楚，而不是机械地对照源码。

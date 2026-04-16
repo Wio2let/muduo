@@ -1,10 +1,8 @@
 # Stage 1: 单线程 Reactor
 
-这一阶段开始进入 muduo 的核心。
+这一阶段先实现最小单线程 Reactor。
 
-先不要想 `TcpServer`，也不要想线程池。我们只做一件事：
-
-让一个线程里的 `EventLoop` 能监听 fd，并在事件发生时调用用户回调。
+目标是让一个线程里的 `EventLoop` 监听 fd，并在事件发生时调用回调。
 
 ## 三个核心类
 
@@ -21,7 +19,7 @@ EventLoop ----------> Poller
    fd
 ```
 
-更贴近执行流程的图：
+执行流程：
 
 ```text
 EventLoop::loop()
@@ -42,7 +40,7 @@ Channel::handleEvent()
 read/write/close/error callback
 ```
 
-## 为什么不是 EventLoop 直接管理 fd
+## 设计拆分
 
 如果 `EventLoop` 直接管理 fd，它就会同时负责：
 
@@ -53,7 +51,7 @@ read/write/close/error callback
 
 这会让 `EventLoop` 过重。
 
-muduo 的拆法更清楚：
+这里采用的职责划分是：
 
 - `EventLoop` 管循环
 - `Poller` 管 IO 多路复用
@@ -97,7 +95,7 @@ public:
 
 ## 最小验收
 
-这一阶段完成后，我们会写一个 pipe 或 eventfd 示例：
+这一阶段的验证方式是写一个 pipe 或 eventfd 示例：
 
 ```text
 write pipe/eventfd
@@ -112,4 +110,4 @@ Channel read callback runs
 EventLoop quits
 ```
 
-能跑通这个，再去写 socket 服务器就会顺很多。
+这个例子跑通后，再继续接入 socket 会更直接。
